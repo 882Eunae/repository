@@ -1,3 +1,5 @@
+<%@page import="ch.qos.logback.core.net.SyslogOutputStream"%>
+<%@page import="java.beans.Statement"%>
 <%@page import="ch.qos.logback.core.recovery.ResilientSyslogOutputStream"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.PreparedStatement"%>
@@ -32,6 +34,7 @@ String url = "jdbc:mariadb://localhost:3306/test"; // DB 이름 test
 String user = "root";                             // 사용자
 String password = "1234";   // 비밀번호
 PreparedStatement ptmt;
+ 
 
 String sql="SELECT * FROM member"; //쿼리문
 String addSql="insert into member(name,id,password,join_date,email,address) values(?,?,?,sysdate(),?,?)"; 
@@ -42,11 +45,11 @@ int count = 1;
 
 //form 태그 안에서 파라미터 받아오기  
 String name=request.getParameter("name"); 
-String id=request.getParameter("id"); 
+String id=request.getParameter("id");
+
 String pw=request.getParameter("password");
 String email=request.getParameter("email"); 
 String address=request.getParameter("address");
-
 
 
 try {
@@ -57,6 +60,7 @@ try {
     	
 	ptmt = conn.prepareStatement(addSql);
 	ptmt.setString(1, name);
+	 System.out.println("setString");
 	ptmt.setString(2,id);
 	ptmt.setString(3,pw);
 	ptmt.setString(4, email);
@@ -64,12 +68,12 @@ try {
 	
 	ptmt.executeUpdate(); //실행 
 	System.out.println("실행성공");
-	//ResultSet rs = ptmt.executeQuery();
+	ResultSet rs = ptmt.executeQuery();
 
-	//while(rs.next()){			
-	//	arr.add(""+count+" : "+rs.getString(1)+", "+rs.getString(2));
-	//	count++;
-	//}
+	while(rs.next()){			
+		arr.add(""+count+" : "+rs.getString(1)+", "+rs.getString(2));
+		count++;
+	}
     
 
     conn.close();
@@ -78,6 +82,7 @@ try {
     e.printStackTrace();
 }finally{
 	
+	System.out.println("id값"+id);
 
 } 
 
@@ -107,71 +112,16 @@ try {
     <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
     <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
     <div class="login-form">
-      <!--   <div class="sign-in-htm">
-        <div class="group">
-          <label for="user" class="label">Username</label>
-          <input id="user" type="text" class="input">
-        </div>
-        <div class="group">
-          <label for="pass" class="label">Password</label>
-          <input id="pass" type="password" class="input" data-type="password">
-        </div>
-        <div class="group">
-          <input id="check" type="checkbox" class="check" checked>
-          <label for="check"><span class="icon"></span> Keep me Signed in</label>
-        </div>
-        <div class="group">
-          <input type="submit" class="button" value="Sign In">
-        </div>
-        <div class="hr"></div>
-        <div class="foot-lnk">
-          <a href="#forgot">Forgot Password?</a>
-        </div>
-      </div> -->
-    <!--    <div class="sign-up-htm">
-        <div class="group">
-          <label for="name" class="label">name</label>
-          <input id="name" name="name" type="text" class="input">
-        </div>
-        <div class="group">
-          <label for="id" class="label">id</label>
-          <input id="id" name="id" type="text" class="input">
-        </div>
-        <div class="group">
-          <label for="password" class="label">Password</label>
-          <input id="password" name="password" type="password" class="input" data-type="password">
-        </div>
-        
-        <div class="group">
-          <label for="email" class="label">Email Address</label>
-          <input id="email" name="email" type="text" class="input">
-        </div>
-          <div class="form-group">
-        <label for="address">주소</label>
-        <input type="text" id="address" name="address" class="form-control" name="address"  id="address" placeholder="주소" required="">
-    </div> 
-      <div class="form-group">
-        <label for="detailAddress">상세주소</label>
-        <input type="text" class="form-control" name="detailAddress"  id="detailAddress" placeholder="주소" required="">
-    </div> 
-    <div class="form-group">
-  	    <label for="postcode">우편번호</label>
-        <input type="text" name="postcode" id="postcode" placeholder="우편번호">
-    </div>
-    <button type="button" onclick="execDaumPostcode()" class="btn btn-success">주소찾기</button> 
-        <div class="group">
-          <input type="submit" class="button" value="Sign Up">
-        </div>
-        <div class="hr"></div>  
-      </div>
-    </div>
-  </div>-->
-  
-	<form method="post" action="login.jsp">
-		아이디 : <input type="text" id="id" name="id"/><br>
+    
+	<form method="post">
+		아이디 : <input type="text" name="id"/><br>
 		이름  : <input type="text" name="name"/><br>
 		이메일 : <input type="text" name="email"/><br>
-		비밀번호 : <input type="password" id="password" name="password"/><br>
+		비밀번호 : <input type="password" id="password" name="password" onkeyup="passwordCheckFunction();"/>
+		         <span style="color: red;" id="passwordCheckLength"></span>                                                   <br>
+		비밀번호 확인 :  <input type="password" id="pwcheck" name="pwcheck" onkeyup="passwordCheckFunction();"/>
+		             <span style="color: red;" id="passwordCheckMessage"></span><br>
+		             
 		주소 <input type="text" id="address" name="address"/><br>
 		상세주소 <input type="text" id="detailAddress"  name="detailAddress"><br>
 		우편번호 <input type="text" name="postcode" id="postcode" placeholder="우편번호"><br>
@@ -184,7 +134,7 @@ try {
 
  
  
-</body>
+
 
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
@@ -197,15 +147,46 @@ function execDaumPostcode() {
     }).open();
 }
 
+let frm=document.frm_zip; 
+let isEqual=false; 
+
 // id 중복체크 
 let checkoverlapId=document.getElementById("id").value; //내가 입력한 아이디값
-for(let i=0; i<result.length; i++){
-			
-		
-	
-}
+
+
+
+//비밀번호 유효성체크 
+function passwordCheckFunction(){
+
+		// 변수 userPassword1, 2에 폼에 입력한 id를 통해 값을 실시간으로 받아와 저장
+
+		let  userPassword1 = document.getElementById('password').value; 
+
+		let  userPassword2 = document.getElementById('pwcheck').value;
+
+                // 패스워드 체크하기 위한 패스워드랑 패스워드확인이랑 같은지
+                
+        if(userPassword1.length<6){
+        	document.getElementById('passwordCheckLength').innerHTML='비밀번호를 6자 이상 쓰시오';
+        }else{
+        	document.getElementById('passwordCheckLength').innerHTML='';
+        }
+                
+
+		if(userPassword1 != userPassword2){
+
+			document.getElementById('passwordCheckMessage').innerHTML='비밀번호가 서로 일치하지 않습니다';
+
+
+		} else {
+			// 정상적이면 어떠한 메시지도 출력되지 않도록 빈칸
+			document.getElementById('passwordCheckMessage').innerHTML='';	
+		}
+
+	}
 
 
 
 </script>
+</body>
 </html>

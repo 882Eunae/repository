@@ -187,6 +187,7 @@ h6 span{
 
   <div class="section">
     <div class="container">
+  
       <div class="row full-height justify-content-center">
         <div class="col-12 text-center align-self-center py-5">
           <div class="section pb-5 pt-5 pt-sm-2 text-center">

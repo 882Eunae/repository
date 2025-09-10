@@ -2,19 +2,19 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
   <display-name>practice</display-name>
   
-   <servlet>
-  <servlet-name>front</servlet-name>
-  <servlet-class>com.practice.common.FrontController</servlet-class>
-</servlet>
-<servlet>
-    <servlet-name>memberApi</servlet-name>
-    <servlet-class>com.practice.api.MemberListServelt</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>memberApi</servlet-name>
-    <url-pattern>/api/members</url-pattern>
-  </servlet-mapping>
+<!--    <servlet> -->
+<!--   <servlet-name>front</servlet-name> -->
+<!--   <servlet-class>com.practice.common.FrontController</servlet-class> -->
+<!-- </servlet> -->
+<!-- <servlet> -->
+<!--     <servlet-name>memberApi</servlet-name> -->
+<!--     <servlet-class>com.practice.api.MemberListServelt</servlet-class> -->
+<!--     <load-on-startup>1</load-on-startup> -->
+<!--   </servlet> -->
+<!--   <servlet-mapping> -->
+<!--     <servlet-name>memberApi</servlet-name> -->
+<!--     <url-pattern>/api/members</url-pattern> -->
+<!--   </servlet-mapping> -->
    
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>

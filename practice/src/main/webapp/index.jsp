@@ -43,38 +43,12 @@ String addSql="insert into member(name,id,password,join_date,email,address) valu
 ArrayList<String> arr = new ArrayList<String>(); //결과 담을 변수
 int count = 1;
 
-//form 태그 안에서 파라미터 받아오기  
-String name=request.getParameter("name"); 
-String id=request.getParameter("id");
-
-String pw=request.getParameter("password");
-String email=request.getParameter("email"); 
-String address=request.getParameter("address");
-
-
 try {
     // JDBC Driver 로드 (신버전은 생략 가능)
     Class.forName("org.mariadb.jdbc.Driver");
     Connection conn = DriverManager.getConnection(url, user, password);
     System.out.println("MariaDB 연결 성공!dfsfsdfsdfds");
     	
-	ptmt = conn.prepareStatement(addSql);
-	ptmt.setString(1, name);
-	 System.out.println("setString");
-	ptmt.setString(2,id);
-	ptmt.setString(3,pw);
-	ptmt.setString(4, email);
-	ptmt.setString(5,address);
-	
-	ptmt.executeUpdate(); //실행 
-	System.out.println("실행성공");
-	ResultSet rs = ptmt.executeQuery();
-
-	while(rs.next()){			
-		arr.add(""+count+" : "+rs.getString(1)+", "+rs.getString(2));
-		count++;
-	}
-    
 
     conn.close();
 } catch (Exception e) {
@@ -82,17 +56,11 @@ try {
     e.printStackTrace();
 }finally{
 	
-	System.out.println("id값"+id);
-
 } 
-
-
-
-
-		
+	
 %>
 
-<h2>회원 목록</h2>
+<h2>회원 가입</h2>
  <ul id="list"></ul>
  
  <table border="1">
@@ -107,16 +75,15 @@ try {
 </table>
 
 <div class="login-wrap">
-
   <div class="login-html">
     <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
     <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
     <div class="login-form">
-    
-	<form method="post">
-		아이디 : <input type="text" name="id"/><br>
-		이름  : <input type="text" name="name"/><br>
-		이메일 : <input type="text" name="email"/><br>
+	<form id="myForm" method="post" action="insert.jsp" >
+		아이디 : <input type="text" id="id" name="id" required="required"/><br>
+		이름  : <input type="text" name="name" required="required"/><br>
+		이메일 : <input type="text" name="email" required="required" onkeyup="validateEmail();"/>
+		        <span style="color: red;" id="result"></span><br>
 		비밀번호 : <input type="password" id="password" name="password" onkeyup="passwordCheckFunction();"/>
 		         <span style="color: red;" id="passwordCheckLength"></span>                                                   <br>
 		비밀번호 확인 :  <input type="password" id="pwcheck" name="pwcheck" onkeyup="passwordCheckFunction();"/>
@@ -126,17 +93,15 @@ try {
 		상세주소 <input type="text" id="detailAddress"  name="detailAddress"><br>
 		우편번호 <input type="text" name="postcode" id="postcode" placeholder="우편번호"><br>
 		<button type="button" onclick="execDaumPostcode()" class="btn btn-success">주소찾기</button> 
-		<input type="submit" class="button" value="Sign Up">
+		<input type="submit" class="button" value="Sign Up">회원가입</input>
 	</form>  
-  
+</div>
 </div>
 
 
- 
- 
-
 
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
 function execDaumPostcode() {
     new daum.Postcode({
@@ -152,8 +117,6 @@ let isEqual=false;
 
 // id 중복체크 
 let checkoverlapId=document.getElementById("id").value; //내가 입력한 아이디값
-
-
 
 //비밀번호 유효성체크 
 function passwordCheckFunction(){
@@ -185,7 +148,39 @@ function passwordCheckFunction(){
 
 	}
 
+const form = document.getElementById('myForm');
+console.log(form);
 
+form.addEventListener('submit', function(event) {
+    if(document.getElementById('address').value==null)	{
+    	isValid=false; 
+    }
+	
+    if (!isValid) { // 유효성 검사 조건이 충족되지 않으면
+        event.preventDefault(); // 폼 제출을 막습니다.
+        alert('모든값을 정확하게 입력하시오'); 
+    }
+});
+
+//이메일 유효성검사 
+const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
+function emailValidChk(email) {
+    if(pattern.test(email) === false) { return false; }
+    else { return true; }
+}
+
+function validateEmail() {
+	var emailInput = document.getElementById('email');
+	var resultDiv = document.getElementById('result');
+
+	var email = emailInput.value;
+
+	if (emailCheck(email)) {
+		resultDiv.innerHTML = '유효한 이메일 주소입니다.';
+	} else {
+		resultDiv.innerHTML = '유효하지 않은 이메일 주소입니다.';
+	}
+}
 
 </script>
 </body>

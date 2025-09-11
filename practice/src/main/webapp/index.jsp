@@ -41,8 +41,7 @@
     //실행시킬 sql문 
     String addSql="insert into member(name,id,password,join_date,email,address) values(?,?,?,sysdate(),?,?)"; 
 	try {
-	    System.out.println("MariaDB 연결 성공!dfsfsdfsdfds");
-	    	
+	    System.out.println("MariaDB 연결 성공!dfsfsdfsdfds");	
 	} catch (Exception e) {
 		System.out.println("db연결실패...");
 	    e.printStackTrace();
@@ -141,7 +140,6 @@ function passwordCheckFunction(){
 			resultDiv.style.color='green'; 
 		} else {
 			resultDiv.innerHTML = '유효하지 않은 이메일 주소입니다.';
-			
 		}
 	}	
 </script>

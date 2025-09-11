@@ -16,11 +16,10 @@
 %>
 
 <form method="post" action="welcome.jsp">
-    <span>작성자<a><%=userId %></a></span><br> 
+    <span>작성자<a><%=userId %></a></span><br>
 	<input type="text" id="title" name="title" ><br> 
-	<textarea width="200px" height="300px"></textarea>
+	<textarea id="content" cols="30" rows="10" placeholder="글을 입력해주세요."></textarea>
     <input type="submit" value="글등록" />  
-    
 </form>
 </body>
 </body>

@@ -15,33 +15,29 @@
 <body>
  <%  
 
-request.setCharacterEncoding("UTF-8"); 
+	request.setCharacterEncoding("UTF-8"); 
+	
+	String url = "jdbc:mariadb://localhost:3306/test"; // DB 이름 test
+	String user = "root";                             // 사용자
+	String password = "1234";   // 비밀번호
+	PreparedStatement ptmt;
+	 
+	String addSql="insert into member(name,id,password,join_date,email,address) values(?,?,?,sysdate(),?,?)"; 
+	
+	ArrayList<String> arr = new ArrayList<String>(); //결과 담을 변수
+	int count = 1;
+	
+	//form 태그 안에서 파라미터 받아오기  
+	String name=request.getParameter("name"); 
+	String id=request.getParameter("id");
+	String pw=request.getParameter("password");
+	String email=request.getParameter("email"); 
+	String address=request.getParameter("address");
 
-
-String url = "jdbc:mariadb://localhost:3306/test"; // DB 이름 test
-String user = "root";                             // 사용자
-String password = "1234";   // 비밀번호
-PreparedStatement ptmt;
- 
-
-String sql="SELECT * FROM member"; //쿼리문
-String addSql="insert into member(name,id,password,join_date,email,address) values(?,?,?,sysdate(),?,?)"; 
-
-
-ArrayList<String> arr = new ArrayList<String>(); //결과 담을 변수
-int count = 1;
-
-//form 태그 안에서 파라미터 받아오기  
-String name=request.getParameter("name"); 
-String id=request.getParameter("id");
-String pw=request.getParameter("password");
-String email=request.getParameter("email"); 
-String address=request.getParameter("address");
-
-try {
     // JDBC Driver 로드 (신버전은 생략 가능)
     Class.forName("org.mariadb.jdbc.Driver");
     Connection conn = DriverManager.getConnection(url, user, password);
+try {
     System.out.println("MariaDB 연결 성공!dfsfsdfsdfds");
     	
 	ptmt = conn.prepareStatement(addSql);
@@ -54,26 +50,20 @@ try {
 	
 	ptmt.executeUpdate(); //실행 
 	System.out.println("실행성공");
-	ResultSet rs = ptmt.executeQuery();
-
-//	while(rs.next()){			
-//		arr.add(""+count+" : "+rs.getString(1)+", "+rs.getString(2));
-//		count++;
-//	}
-   
-    conn.close();
+	//ResultSet rs = ptmt.executeQuery(); => ptmt를 2번 실행해서 오류가남 
+	
 	response.sendRedirect("login.jsp");
 
 } catch (Exception e) {
 	System.out.println("db연결실패...");
-    e.printStackTrace();
+    e.printStackTrace();   
+    out.println(e);
 }finally{
-	
 	System.out.println("id값"+id);
-
+    conn.close();
 } 
 %>
 
-<h3>회원가입 화면페이지입니다</h3>
+<h3>회원가입 실패</h3>
 </body>
 </html>

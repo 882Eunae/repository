@@ -33,12 +33,10 @@ String sql="SELECT * FROM member WHERE id = ? AND PASSWORD = ?"; //쿼리문
 
 ArrayList<String> arr = new ArrayList<String>(); //결과 담을 변수
 int count = 1;
+	Connection conn = DriverManager.getConnection(url, user, password);
 
 try {
-	Class.forName("org.mariadb.jdbc.Driver");
-	Connection conn = DriverManager.getConnection(url, user, password);
-    // JDBC Driver 로드 (신버전은 생략 가능)
-    
+	    Class.forName("org.mariadb.jdbc.Driver");    
         ptmt = conn.prepareStatement(sql);
         ptmt.setString(1, id);
         ptmt.setString(2, pw);
@@ -49,18 +47,14 @@ try {
             response.sendRedirect("welcome.jsp");
         } else {
             out.println("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.");
-        }
-
-    conn.close();
+        } 
 } catch (Exception e) {
 	System.out.println("로그인실패ㅜㅜㅜ ");
     e.printStackTrace();
 }finally{
-	
-} 
-	
+	 conn.close();
+} 	
 %>
-
 <h3>로그인처리화면!</h3>
 </body>
 </html>

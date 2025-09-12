@@ -3,8 +3,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 <h3>게시글쓰기</h3>
@@ -15,11 +17,11 @@
 	
 %>
 
-<form method="post" action="welcome.jsp">
+<form method="post" action="writehandle.jsp">
     <span>작성자<a><%=userId %></a></span><br>
-	<input type="text" id="title" name="title" ><br> 
-	<textarea id="content" cols="30" rows="10" placeholder="글을 입력해주세요."></textarea>
-    <input type="submit" value="글등록" />  
+	<input type="text" id="title" style="width: 252px;"  name="title" required="required" placeholder="제목을 입력해주세요."  ><br> 
+	<textarea id="content" cols="30" rows="10" name="content"  style="width: 252px;" placeholder="글을 입력해주세요." required="required"></textarea><br>
+    <button class="btn btn-primary" type="submit">글등록</button>   
 </form>
 </body>
 </body>

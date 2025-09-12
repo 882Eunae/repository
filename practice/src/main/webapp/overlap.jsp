@@ -43,6 +43,8 @@
 	 		//중복확인후 다시 회원가입 페이지 이동 
 	 		response.sendRedirect("index.jsp"); 	
 	
+	 		
+	 		
 	%>
 </body>
 </html>

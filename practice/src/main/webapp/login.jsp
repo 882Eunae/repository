@@ -1,17 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
 
 body{
   margin:0;
   color:#6a6f8c;
-  background:#c8c8c8;
+ 
   font:600 16px/18px 'Open Sans',sans-serif;
 }
 *,:after,:before{box-sizing:border-box}
@@ -25,15 +27,15 @@ a{color:inherit;text-decoration:none}
   max-width:525px;
   min-height:670px;
   position:relative;
-  background:url(https://raw.githubusercontent.com/khadkamhn/day-01-login-form/master/img/bg.jpg) no-repeat center;
-  box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
+ 
+
 }
 .login-html{
   width:100%;
   height:100%;
   position:absolute;
   padding:90px 70px 50px 70px;
-  background:rgba(40,57,101,.9);
+  background:rgb(241 255 240);
 }
 .login-html .sign-in-htm,
 .login-html .sign-up-htm{
@@ -67,7 +69,7 @@ a{color:inherit;text-decoration:none}
 .login-html .sign-in:checked + .tab,
 .login-html .sign-up:checked + .tab{
   color:#fff;
-  border-color:#1161ee;
+  
 }
 .login-form{
   min-height:345px;
@@ -82,7 +84,7 @@ a{color:inherit;text-decoration:none}
 .login-form .group .input,
 .login-form .group .button{
   width:100%;
-  color:#fff;
+  color:rgb(48 98 42);
   display:block;
 }
 .login-form .group .input,
@@ -101,7 +103,7 @@ a{color:inherit;text-decoration:none}
   font-size:12px;
 }
 .login-form .group .button{
-  background:#1161ee;
+  background:#b8fabe;
 }
 .login-form .group label .icon{
   width:15px;
@@ -162,70 +164,52 @@ a{color:inherit;text-decoration:none}
 </head>
 <body>
 <%
-	
-	
+	//세션에서 로그인 성공/실패 여부확인
+	String loginCheck=(String)session.getAttribute("loginCheck"); 
 	
 	
 %>
 
 <div class="login-wrap">
-  <div class="login-html">
-    <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
-    <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
+  <div class="login-html" style="margin: 30px 0 0 0;">
+    <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab" style="color:green;">Sign In</label>
+    <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"></label>
    
     <div class="login-form">
-     <form method="post" action="loginprocess.jsp">
+     <form method="post" action="loginprocess.jsp" class="form">
       <div class="sign-in-htm">
         <div class="group">
-          <label for="id" class="label">id</label>
-          <input id="id" name="id" type="text" class="input">
+          <label for="id" class="label" style="color: green" >id</label>
+          <input id="idInput" name="id" type="text" class="input" style="background-color:rgb(13 71 26 / 10%)" >
         </div>
         <div class="group">
-          <label for="password" class="label">Password</label>
-          <input id="password" name="password"  type="password" class="input" data-type="password">
+          <label for="password" class="label" style="color: green" >Password</label>
+          <input id="password" name="password"  type="password" class="input" data-type="password"  style="background-color:rgb(13 71 26 / 10%)">
         </div>
+       
         <div class="group">
-          <input id="check" type="checkbox" class="check" checked>
-          <label for="check"><span class="icon"></span> Keep me Signed in</label>
+          <input type="submit" class="button" onClick="handleSubmit(event)" value="Sign In" style="color: green" >
         </div>
-        <div class="group">
-          <input type="submit" class="button" value="Sign In">
-        </div>
-        <div class="hr"></div>
-        <div class="foot-lnk">
-          <a href="#forgot">Forgot Password?</a>
-        </div>
+     	 <c:if test="${loginCheck == 'fail'}"> <!-- if 조건 선언 -->
+     		<p  align="center">  로그인정보가 일치하지 않습니다   </p>
+		 </c:if>
+		  
       </div>
       </form>
-      <div class="sign-up-htm">
-        <div class="group">
-          <label for="id" class="id">id</label>
-          <input id="id" name="id" type="text" class="input">
-        </div>
-        <div class="group">
-          <label for="password" class="label">Password</label>
-          <input id="password" name="password" type="password" class="input" data-type="password">
-        </div>
-        <div class="group">
-          <label for="pass" class="label">Repeat Password</label>
-          <input id="pass" type="password" class="input" data-type="password">
-        </div>
-        <div class="group">
-          <label for="pass" class="label">Email Address</label>
-          <input id="pass" type="text" class="input">
-        </div>
-        <div class="group">
-          <input type="submit" class="button" value="Sign Up">
-        </div>
-        <div class="hr"></div>
-        <div class="foot-lnk">
-          <label for="tab-1">Already Member?</a>
-        </div>
-      </div>
+    
     </div>
   </div>
 </div>
 
+<script>
+	function handleSubmit(event){
+		if($('#idInput').val().length ==0){
+			alert('로그인 정보를 입력해주세요');
+			event.preventDefault();
+			return;
+		} 
+	}
+</script>
 
 	
 </body>

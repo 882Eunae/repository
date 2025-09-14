@@ -58,6 +58,8 @@ try {
 	System.out.println("db연결실패...");
     e.printStackTrace();   
     out.println(e);
+    
+    response.sendRedirect("index.jsp");
 }finally{
 	System.out.println("id값"+id);
     conn.close();

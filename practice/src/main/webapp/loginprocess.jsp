@@ -44,9 +44,10 @@ try {
 
         if (rs.next()) {
             session.setAttribute("userId", id);
+            session.setAttribute("loginCheck", "success");
             response.sendRedirect("welcome.jsp");
         } else {
-           
+           session.setAttribute("loginCheck", "fail");
             response.sendRedirect("login.jsp");
         } 
 } catch (Exception e) {

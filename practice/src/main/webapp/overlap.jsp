@@ -15,7 +15,7 @@
 	   request.setCharacterEncoding("UTF-8"); 
 	    //사용자가 직접입력한 id	   
 	   String id=request.getParameter("id"); 
-  
+
 	   //데이터베이스 정보 
 	 	String url = "jdbc:mariadb://localhost:3306/test"; // DB 이름 test
 	 	String user = "root";                             // 사용자
@@ -28,22 +28,26 @@
 	 	Class.forName("org.mariadb.jdbc.Driver");
 		Connection conn = DriverManager.getConnection(url, user, password);
 	 	
+	    String checkId=request.getParameter("checkId");
+	 	out.println(checkId);
+	 	session.setAttribute("writeId", checkId); //사용자가 작성한 아이디 
+	 	
 		//파라미터 전달값 넘기기 
 	 	ptmt=conn.prepareStatement(sql);
-	 	ptmt.setString(1,id); 
+	 	ptmt.setString(1,checkId); 
 	 	
 	 	ResultSet rs = ptmt.executeQuery(); 
 	 	
-	 	String overlap; 
 	 	if(rs.next()){
-	 		session.setAttribute("overlap", "overlap"); //중복값 존재   
+			session.setAttribute("overlap", "overlap"); 		 		
 	 	}else{
-	 		session.setAttribute("overlap", "no"); //중복값이 없음 
+	 		session.setAttribute("overlap", "no" ); 
 	 	}
-	 		//중복확인후 다시 회원가입 페이지 이동 
-	 		response.sendRedirect("index.jsp"); 	
+	 	
+	 	response.sendRedirect("index.jsp");
+	 	
+	 	
 	
-	 		
 	 		
 	%>
 </body>

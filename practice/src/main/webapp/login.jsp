@@ -191,7 +191,7 @@ a{color:inherit;text-decoration:none}
           <input type="submit" class="button" onClick="handleSubmit(event)" value="Sign In" style="color: green" >
         </div>
      	 <c:if test="${loginCheck == 'fail'}"> <!-- if 조건 선언 -->
-     		<p  align="center">  로그인정보가 일치하지 않습니다   </p>
+     		<p  align="center">  로그인정보가 일치하지 않습니다</p>
 		 </c:if>
 		  
       </div>
@@ -207,7 +207,13 @@ a{color:inherit;text-decoration:none}
 			alert('로그인 정보를 입력해주세요');
 			event.preventDefault();
 			return;
-		} 
+		}
+		
+		if($('#password').val().length == 0){
+			alert('비밀번호를 입력해주세요'); 
+			event.preventDefault(); 
+			return;
+		}
 	}
 </script>
 

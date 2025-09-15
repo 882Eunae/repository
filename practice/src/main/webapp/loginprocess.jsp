@@ -26,14 +26,11 @@ ResultSet rs = null;
 String id=request.getParameter("id");
 String pw=request.getParameter("password");
 
-out.println(id+pw)
-
-;
+out.println(id+pw);
 String sql="SELECT * FROM member WHERE id = ? AND PASSWORD = ?"; //쿼리문
 
-ArrayList<String> arr = new ArrayList<String>(); //결과 담을 변수
 int count = 1;
-	Connection conn = DriverManager.getConnection(url, user, password);
+Connection conn = DriverManager.getConnection(url, user, password);
 
 try {
 	    Class.forName("org.mariadb.jdbc.Driver");    
@@ -47,7 +44,7 @@ try {
             session.setAttribute("loginCheck", "success");
             response.sendRedirect("welcome.jsp");
         } else {
-           session.setAttribute("loginCheck", "fail");
+            session.setAttribute("loginCheck", "fail");
             response.sendRedirect("login.jsp");
         } 
 } catch (Exception e) {

@@ -33,7 +33,8 @@
 	String pw=request.getParameter("password");
 	String email=request.getParameter("email"); 
 	String address=request.getParameter("address");
-
+	
+	
     // JDBC Driver 로드 (신버전은 생략 가능)
     Class.forName("org.mariadb.jdbc.Driver");
     Connection conn = DriverManager.getConnection(url, user, password);

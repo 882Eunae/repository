@@ -21,6 +21,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 <title>Insert title here</title>
 <style>
 	.input-form {
@@ -71,7 +73,7 @@
     //실행시킬 sql문 
     String addSql="insert into member(name,id,password,join_date,email,address) values(?,?,?,sysdate(),?,?)"; 
 	try {
-	    System.out.println("MariaDB 연결 성공!dfsfsdfsdfds");	
+	    System.out.println("MariaDB 연결 성공!");	
 	} catch (Exception e) {
 		System.out.println("db연결실패...");
 	    e.printStackTrace();
@@ -79,30 +81,40 @@
 	    conn.close();	
 	} 	
 	
+	String overlap=(String)session.getAttribute("overlap");  
+	
+	
+	
 	String writeId=(String)session.getAttribute("writeId");
-	String overlap="overlap";
+	String name=(String)session.getAttribute("name"); 
+	String pw=(String)session.getAttribute("pw"); 
+	String email=(String)session.getAttribute("email"); 
+	String address=(String)session.getAttribute("address"); 
+	
+	
 %>
 
  <ul id="list"></ul>
 	<div class="login-wrap">
 	  <div class="login-html">
 	<h2>회원 가입</h2>
+		<input  type="hidden" value=<%=overlap %> id="overlap" name="overlap" /> 
 	    <div class="login-form">
 		<form  class="input-form" id="myForm" method="post" action="insert.jsp" >
 			<div>
 				<label>	아이디 :</label>
 				<c:choose>
 					<c:when test="${writeId != null }">
-						<input type="text" id="id" name="id" value="<%=writeId %>" required="required" onkeyup="validateId();" />
+						<input type="text" id="id" name="id" value="<%=writeId %>" onkeyup="validateId();" />
 						<br><span style="color: red;" id="resultId"></span>
 					</c:when>
 					<c:when test="${writeId == null }">
 						<input type="text" id="id" name="id"  required="required" />
 					</c:when>
 				</c:choose> 	
-					<button type="button" onClick="overlapCheck()" class="navyBtn">
+					<button type="button" onClick="overlapCheck()" class="btn btn-info">
 						중복확인
-				</button>
+				     </button>
 				<c:choose>
 				       <c:when test="${overlap == 'overlap'}">
 				      		<p style="color : red;" >중복된값입니다</p>
@@ -117,16 +129,31 @@
 			</div>
 			<div>
 				<label>이름  :</label>
-				<input type="text" name="name" required="required"/>
+				<c:choose>
+					<c:when test="${name != null }">
+						<input type="text" id="name" name="name" value="<%=name %>"/>
+					</c:when>
+					<c:when test="${name == null }">
+						<input type="text" id="name" name="name"  required="required" />
+					</c:when>
+				</c:choose> 
+					
 			</div>
 			<div>
 				<label>이메일 :</label> 
-				<input type="text" id="email" name="email" required="required" onkeyup="validateEmail();"/>
+				<c:choose>
+					  <c:when test="${email != null }">	
+						<input type="text" id="email" name="email" value=<%=email %> onkeyup="validateEmail();"/>
+					  </c:when>
+					  <c:when test="${email == null }">	
+						<input type="text" id="email" name="email"  onkeyup="validateEmail();" />
+					  </c:when>
+				</c:choose>
 			  	<span style="color: red;" id="result"></span>
 			</div>
 			<div>
 				<label>비밀번호 : </label>
-				<input type="password" id="password" name="password" onkeyup="passwordCheckFunction();"/>
+				<input type="password" id="password" name="password" value=<%=pw %> onkeyup="passwordCheckFunction();"/>
 			    <span style="color: red;" id="passwordCheckLength"></span>
 			</div>
 			<div>
@@ -136,7 +163,14 @@
 			</div>
 			<div>	             
 				<label>주소</label>
-				<input type="text" id="address" name="address" required="required"/>
+				<c:choose>
+					<c:when test="${address eq null}">
+						<input type="text" id="address" name="address" value="ㅇㅇㅇ" ></input>
+					</c:when>
+					<c:otherwise>
+						<input type="text" id="address" name="address" value=<%=address%> />
+					</c:otherwise>
+				</c:choose>
 				<button type="button" onclick="execDaumPostcode()" class="btn btn-success">주소찾기</button> 
 			</div>
 			<div>
@@ -145,7 +179,7 @@
 			</div>
 			<div>	
 				<label>상세주소</label>
-				<input type="text" id="detailAddress"  name="detailAddress">
+				<input type="text" id="detailAddress" name="detailAddress">
 			</div>
 			<input type="submit" class="button" onClick="handleSubmit(event)" value="회원가입" style="width:255px;"/>
 		</form>  
@@ -158,8 +192,11 @@
 		let emailVal; //이메일유효성 
 		let pwVal; //비밀번호 유효성 비번작성조건,일치 불일치 모두 통과해야함
 		let idVal; //아이디 유효성
+	 
+		let overChk='no';  //중복버튼 클릭 눌렀는지 여부 확인 기본값 no 임 => 어차피 중복확인 호출하면 다시 초기화됨 
 		
 		
+		console.log(overChk);
 		function execDaumPostcode() {
 		    new daum.Postcode({
 		        oncomplete: function(data) {
@@ -204,8 +241,7 @@
 			//비밀번호 유효성검사 
 			let reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[~?!@#$%^&*_-]).{8,}$/
 
-			
-			
+	
 	        // 패스워드 체크하기 위한 패스워드랑 패스워드확인이랑 같은지
 	        if(!reg.test(userPassword1)){
 	        	document.getElementById('passwordCheckLength').innerHTML='대,소문자 특수문자 포함하여 8자이상 쓰시오';
@@ -233,6 +269,7 @@
 		
 		let id = document.getElementById('id').value;
 		
+
 		if(id.length<1){
 			  event.preventDefault();
 			  alert('아이디를 입력하세요');
@@ -252,11 +289,31 @@
 			alert('이메일 형식을 다시 확인해주세요');
 		}
 		
+		if(document.getElementById('overlap').value != 'no'){ //세션정보
+			event.preventDefault(); 
+			alert('아이디 값 중복확인 해주세요');
+		}
+		
+		
 	}
 
 	function overlapCheck(){
-		let id=document.getElementById('id').value;
-	    window.location.href = "overlap.jsp?checkId=" + id; 
+		overChk='yes';
+		//파라미터 아이디,이름,비밀번호 자바스크립트안에서 넘기기  
+	    let urlParams = new URLSearchParams("?checkId=test&name=yes&password=no&email=no&address=no");
+
+	    urlParams.set("checkId", document.getElementById('id').value);
+	    urlParams.set("name", document.getElementById('name').value);
+	    urlParams.set("password",document.getElementById('password').value);
+	    urlParams.set("email",document.getElementById('email').value);
+	    urlParams.set("address",document.getElementById('address').value);
+
+	    // ?gil=yes&log=wow&gillog=good
+	    console.log(urlParams);
+	
+	    window.location.href = "overlap.jsp?" + urlParams; //안넘어간 이유 -> form 형태로 넘긴게 아니라 파라미터 한개 값만 전달함 parameter여러값 전 
+	    
+	    
 	}  
 	
 	function validateId(){
@@ -275,10 +332,7 @@
 			idVal='yes';
 			resultDiv.innerHTML=''; 
 		}
-		
-		
-	
-			
+
 	}
 	
 </script>

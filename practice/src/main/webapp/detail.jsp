@@ -1,9 +1,11 @@
+<%@page import="org.apache.tomcat.util.log.SystemLogHandler"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,9 +40,9 @@
     
  	ResultSet rs = ptmt.executeQuery();
  	
- 	String title=null; 
-    String content=null; 
-    String userId=null; 
+ 	String title = null; 
+    String content = null; 
+    String userId = " "; 
     
  	if(rs.next()){
  		 title=rs.getString("title");
@@ -50,31 +52,51 @@
  	
  	String loginUser=(String)session.getAttribute("userId"); //로그인한 유저 정보
  	
- 
+				String equal="notequal"; // 
+			 	if(loginUser.equals(userId)){
+			 		equal= "equal";
+			 	}	
 %>
 
 	<input type="hidden" id="loginInfo" value="<%=loginUser%>"/> 
 	<div>
 		<div style="width: 400px; margin: 0 auto;">
 			<form action="modify.jsp" method="post" id="form1" >
-			<a>작성자 : <%=userId %></a>
-				<input type="hidden" value="<%=boardNo%>" name="boardNo">
+				<input type="hidden" value="<%=boardNo%>" name="boardNo" id="boardNo" >
 				<input type="hidden" id="writeId" value="<%=userId%>" name="userId">
 			<div class="mb-3 row">
 			  <div class="col-sm-10">
-			    <label>제목</label>
-			    <input type="text" style="width: 252px;  class="form-control-plaintext" id="title" value="<%=title%>" name="title" required="required" >
-			  </div>
+			    <label>제목 : </label>
+			      <% if(loginUser.equals(userId)){ %>
+					 <input type="text" style="width: 252px;  class="form-control-plaintext" id="title" value="<%=title%>" name="title" >
+			  		<% } else{   %>
+			  			    <span style="color: black;"><%=title %></span>
+			  			 <% } %>     	
+				<label>작성자 :
+					<span> <%=userId %> </span>
+				</label>
+			   </div>
 			</div>
 			<div class="mb-3 row">
 			  <div class="col-sm-10">
-			  
-			    <input  value="<%=content %>" style="width: 252px; height: 190px;"  id="content" class="form-control" name="content" required="required">
+			    <%
+			 	if(equal.equals("equal")){
+			 	%>  
+			    	<textarea rows="6" cols="22" id="content" name="content"  ><%=content %></textarea>
+			    <% }  else{ %>
+			    	 <textarea rows="6" cols="22" id="content" name="content" disabled><%=content %></textarea>	
+			    	 <% } %>
 			  </div>
 			</div>
-			 <a class="btn btn-primary" href="welcome.jsp" role="button">글목록이동</a>
-			<input  class="btn btn-primary" type="submit" id="modify"  name="boardNo" onclick="send(event);" value="수정하기" ></input>
+			 <a class="btn btn-primary" href="welcome.jsp" role="button">글목록 이동</a>
+			 	<%
+			 	if(equal.equals("equal")){ //c태그 이용할려 했으나 도저히 안되서 자바코드 사용	
+			 	%> 
+				<input class="btn btn-warning" type="submit" id="modify"  name="boardNo" onclick="send(event);" value="수정하기" ></input>
+				<button type="button" class="btn btn-danger" id="delBtn" >삭제하기</button>
+			 	<% } %>
 			</form>
+
 		</div>
 	</div>
 	
@@ -88,14 +110,18 @@
 	console.log(originTitle); 
 	console.log(originContent);
 	
+	var f1=document.getElementById("modify");
+	console.log(f1);
+	
+	
 	//수정하기 이벤트
 	function send(event){ 
 		//수정버튼    
 		var f1=document.getElementById("modify");
+
 		//제목 입력 안될경우 차단
 		if($("#title").val() == null){	
-			$f1.addEventListener("submit", (event) => {
-				  // 동작(이벤트)을 실행하지 못하게 막는 메서드입니다.
+			f1.addEventListener("submit", (event) => {
 				  event.preventDefault();
 				  alert('제목을 입력하세요');
 			});
@@ -113,6 +139,12 @@
 	console.log($('#loginInfo').val()); 
 	console.log('...');
 	
+	$('#delBtn').on('click',(event)=>{
+		let boardNo = $('#boardNo').val(); 
+		alert('삭제버튼 클릭'+boardNo);
+		location.href = "delete.jsp?boardNo=" + boardNo;
+		alert('삭제완료'); 
+	})
 
 </script>
 </html>

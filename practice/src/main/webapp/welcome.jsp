@@ -12,7 +12,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 <style>
@@ -41,16 +41,17 @@
 	 <input type="hidden" id="sessionId" value="<%=userId%>"></input>
 	<div class="container">
 	 <nav class="navbar navbar-light bg-light" style="margin-bottom: 20px;" >
-	  <div class="container-fluid">
-	    <a class="navbar-brand" href="write.jsp">게시글 쓰기</a> 
+	  <div class="container-fluid" style=" background-color :  " >
+	    <a class="navbar-brand" href="write.jsp"   >게시글 쓰기</a> 
+	    <a class="navbar-brand" href="logout.jsp">로그아웃</a> 
 	  </div> 
 	</nav>
-    <table width="500" border="1" style="margin-bottom: 20px;">
+    <table width="876" border="1" style="margin-bottom: 20px;">
 		<thead>
+			<th><input type="checkbox"></input></th>
 		    <th>번호</th>
 			<th>제목</th>
 			<th>아이디</th>
-			<th>ㅁ</th>
 		</thead>
 	<%
 		Class.forName("org.mariadb.jdbc.Driver");	
@@ -70,6 +71,9 @@
 					String title = rs.getString("title");
 		%>
 		 <tbody>
+		    <td>
+			  <input id="checkNo" type="checkbox" name="checkNo"  value="<%=no%>"></input>
+			</td>
 		   <td>	
 			  <%=no%>	
 			</td>
@@ -77,9 +81,7 @@
 			  <a href="detail.jsp?boardNo=<%=no%>"><%=title %></a>
 			 </td>
 			<td><%=id %></td>
-			<td>
-			  <input id="checkNo" type="checkbox" name="checkNo"  value="<%=no%>"></input>
-			</td>
+			
 		<% 
 				}	
 			} catch (SQLException ex) {
@@ -92,8 +94,9 @@
 		 </tbody>
 	</table>
 	
-	<button type="button" class="btn btn-primary" onClick="button();" style="float: right; margin-right: 370px;">삭제하기</button>
-	
+  <!-- 	
+	<button type="button" class="btn btn-primary" onClick="button();" style="float: right; margin-right: 10px; background-color="#b8fabe">삭제하기</button>
+   -->	
 	</div>	
 </body>
 <script>
@@ -114,10 +117,9 @@
 //		}
 //	}
 	
-	console.log('이게왜돼>');
+	
 	//삭제버튼 클릭 
 	function button(){	
-		
  		let checked=$('input[name="checkNo"]:checked');	
  		console.log(checked);	
 		for(let i=0; i < checked.length; i++ ){

@@ -16,6 +16,16 @@ pageEncoding="UTF-8"%>
 		<!-- 부트스트랩 적용 -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<style>
+		.box{
+		 width: 300px; 
+		 display: block; 
+		 margin: auto;			
+	     margin-top: 200px;
+		}	
+	
+	
+	</style>        
 </head>
 <body>
 <%
@@ -59,7 +69,7 @@ pageEncoding="UTF-8"%>
 %>
 
 	<input type="hidden" id="loginInfo" value="<%=loginUser%>"/> 
-	<div>
+	<div class="box">
 		<div style="width: 400px; margin: 0 auto;">
 			<form action="modify.jsp" method="post" id="form1" >
 				<input type="hidden" value="<%=boardNo%>" name="boardNo" id="boardNo" >
@@ -70,7 +80,7 @@ pageEncoding="UTF-8"%>
 			      <% if(loginUser.equals(userId)){ %>
 					 <input type="text" style="width: 252px;  class="form-control-plaintext" id="title" value="<%=title%>" name="title" >
 			  		<% } else{   %>
-			  			    <span style="color: black;"><%=title %></span>
+			  			    <span style="color: black;"><%=title %></span><br>
 			  			 <% } %>     	
 				<label>작성자 :
 					<span> <%=userId %> </span>
@@ -82,9 +92,9 @@ pageEncoding="UTF-8"%>
 			    <%
 			 	if(equal.equals("equal")){
 			 	%>  
-			    	<textarea rows="6" cols="22" id="content" name="content"  ><%=content %></textarea>
+			    	<textarea style="width: 300px; height: 200px;" id="content" name="content"  ><%=content %></textarea>
 			    <% }  else{ %>
-			    	 <textarea rows="6" cols="22" id="content" name="content" disabled><%=content %></textarea>	
+			    	 <textarea style="width: 300px; height: 200px;" id="content" name="content" disabled><%=content %></textarea>	
 			    	 <% } %>
 			  </div>
 			</div>
@@ -141,7 +151,7 @@ pageEncoding="UTF-8"%>
 	
 	$('#delBtn').on('click',(event)=>{
 		let boardNo = $('#boardNo').val(); 
-		alert('삭제버튼 클릭'+boardNo);
+		
 		location.href = "delete.jsp?boardNo=" + boardNo;
 		alert('삭제완료'); 
 	})

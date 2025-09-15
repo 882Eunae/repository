@@ -111,6 +111,9 @@
 					<c:when test="${writeId == null }">
 						<input type="text" id="id" name="id"  required="required" />
 					</c:when>
+					<c:otherwise>
+						<p> </p>
+					</c:otherwise>
 				</c:choose> 	
 					<button type="button" onClick="overlapCheck()" class="btn btn-info">
 						중복확인
@@ -136,14 +139,13 @@
 					<c:when test="${name == null }">
 						<input type="text" id="name" name="name"  required="required" />
 					</c:when>
-				</c:choose> 
-					
+				</c:choose> 				
 			</div>
 			<div>
 				<label>이메일 :</label> 
 				<c:choose>
 					  <c:when test="${email != null }">	
-						<input type="text" id="email" name="email" value=<%=email %> onkeyup="validateEmail();"/>
+						<input type="text" id="email" name="email" value="<%=email %>" onkeyup="validateEmail();"/>
 					  </c:when>
 					  <c:when test="${email == null }">	
 						<input type="text" id="email" name="email"  onkeyup="validateEmail();" />
@@ -193,10 +195,7 @@
 		let pwVal; //비밀번호 유효성 비번작성조건,일치 불일치 모두 통과해야함
 		let idVal; //아이디 유효성
 	 
-		let overChk='no';  //중복버튼 클릭 눌렀는지 여부 확인 기본값 no 임 => 어차피 중복확인 호출하면 다시 초기화됨 
 		
-		
-		console.log(overChk);
 		function execDaumPostcode() {
 		    new daum.Postcode({
 		        oncomplete: function(data) {
@@ -250,17 +249,30 @@
 	        }else if(reg.test(userPassword1)){
 	        	document.getElementById('passwordCheckLength').innerHTML='비밀번호 가능';
 	        	document.getElementById('passwordCheckLength').style.color='green';
-	        	pwVal='yes';
+	        	//pwVal='yes';
 	        }
 	        
 			if(userPassword1 != userPassword2 && userPassword2.length>0){
 				document.getElementById('passwordCheckMessage').innerHTML='비밀번호가 서로 일치하지 않습니다';
 				document.getElementById('passwordCheckMessage').style.color='red';
+				pwVal='no';
+				
 			}else if(userPassword1 == userPassword2 &&userPassword2.length>0) {
 				document.getElementById('passwordCheckMessage').innerHTML='비밀번호가 일치합니다';
-				document.getElementById('passwordCheckMessage').style.color='green';
-				
+				document.getElementById('passwordCheckMessage').style.color='green';	
 			}
+			
+			// 비번 일치 x,   
+			if(!reg.test(userPassword1) && userPassword1 == userPassword2){
+				document.getElementById('passwordCheckLength').color='red';
+				pwVal='no'; 
+			}
+			
+			//비번 조건
+			if(reg.test(userPassword1) && userPassword1 == userPassword2  ){
+				pwVal = 'yes';    
+			}
+			
 		}
 		
 	function handleSubmit(event){
@@ -276,29 +288,38 @@
 			  return;
 		}else if(idVal=='no'){
 			event.preventDefault();
-			alert('아이디를 올바르게 입력해주시오'); 
+			alert('아이디를 올바르게 입력해주시오');
+			return;
 		}
 		
-		if(pwVal=='no'){
-			event.preventDefault();
-			alert('비밀번호를 다시 확인해주세요'); 	
-		}
+	
 		
-		if(emailVal=='no'){
+		if(emailVal=='no' || document.getElementById('email').value.length <1 ){
 			event.preventDefault(); 
 			alert('이메일 형식을 다시 확인해주세요');
+			return;
 		}
-		
 		if(document.getElementById('overlap').value != 'no'){ //세션정보
 			event.preventDefault(); 
 			alert('아이디 값 중복확인 해주세요');
+			return;
+		}
+		if(document.getElementById('name').value.length<1){
+			event.preventDefault();
+			alert('이름을 입력해주세요');
+			return;
+		}
+		if(pwVal != 'yes'){
+			event.preventDefault(); 
+			alert('비밀번호를 다시 확인 해주세요'); 
+			return;
 		}
 		
 		
 	}
 
 	function overlapCheck(){
-		overChk='yes';
+		
 		//파라미터 아이디,이름,비밀번호 자바스크립트안에서 넘기기  
 	    let urlParams = new URLSearchParams("?checkId=test&name=yes&password=no&email=no&address=no");
 

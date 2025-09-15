@@ -34,14 +34,6 @@
 		String email=request.getParameter("email"); 
 		String address=request.getParameter("address");
 		
-	 	//세션값에 저장하기
-	 	session.setAttribute("writeId", checkId); //사용자가 작성한 아이디 
-		session.setAttribute("name", name); 
-		session.setAttribute("pw", pw); 
-		session.setAttribute("email", email); 
-		session.setAttribute("address", address);   
-	 	
-	 	
 		//파라미터 전달값 넘기기 
 	 	ptmt=conn.prepareStatement(sql);
 	 	ptmt.setString(1,checkId); 
@@ -53,6 +45,14 @@
 	 	}else{
 	 		session.setAttribute("overlap", "no" ); 
 	 	}
+	 	//세션값에 저장하기
+	 	session.setAttribute("writeId", checkId); //사용자가 작성한 아이디 
+		session.setAttribute("name", name); 
+		session.setAttribute("pw", pw); 
+		session.setAttribute("email", email); 
+		session.setAttribute("address", address);   
+	 	
+	 	
 	 	
 	 	response.sendRedirect("index.jsp");
 

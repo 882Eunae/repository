@@ -19,7 +19,10 @@ public class dataTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        	
+        
+        
+        
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
         return sqlSessionFactory;
     }

@@ -27,17 +27,35 @@
 		String password = "1234";   // 비밀번호
 		PreparedStatement ptmt; //객체생성 
 		
+		String userId=(String) session.getAttribute("userId"); 
 		
 		String addSql="INSERT INTO board (title, member_id, content) values(?, ?, ?)"; 
+		
 		
 		//form  받아오기 
 		String title = request.getParameter("title"); 
 		String content = request.getParameter("content");  
 		
-		//작성자 세션정보 받아오기
-		String userId=(String) session.getAttribute("userId"); 
+		String path = application.getRealPath("/files"); //path 
+		 
+		int size = 1024*1024*100;	//100MB
 		
-	
+		String filename="";		//첨부파일명
+		String orgfilename="";	//첨부파일명 
+		
+		MultipartRequest multi = new MultipartRequest(
+				request,	//원래 request
+				path,		//파일 업로드 위치
+				size,		//최대 파일 크기
+				"UTF-8",	//파일 데이터 인코딩
+				new DefaultFileRenamePolicy()
+		);
+
+		filename = multi.getFilesystemName("attach");		//파일명(저장된 파일명)
+		orgfilename = multi.getOriginalFileName("attach");	//파일명(원본 파일명)
+		title=multi.getParameter("title");
+		content =multi.getParameter("content"); //내용 
+		
 	 try{
 		// 데이터접근 생성
 		Class.forName("org.mariadb.jdbc.Driver");

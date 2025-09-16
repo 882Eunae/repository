@@ -13,7 +13,11 @@
 		 display: block; 
 		 margin: auto;			
 	     margin-top: 200px;
-		}	
+		}
+		
+		 .fileInput {
+	      margin-bottom: 20px; /* 요소 아래쪽 바깥 여백 */
+  		}	
     
     </style>
 </head>
@@ -26,10 +30,11 @@
 %>
 <div class="box">
 	<h3>게시글쓰기</h3>
-	<form method="post" action="writehandle.jsp">
+	<form method="post" enctype="multipart/form-data" action="writehandle.jsp">
 	    <span>작성자 :<a><%=userId %></a></span><br>
 		<input type="text" id="title" style="width: 252px;"  name="title" required="required" placeholder="제목을 입력해주세요."  ><br> 
 		<textarea id="content" cols="30" rows="10" name="content"  style="width: 252px;" placeholder="글을 입력해주세요." required="required"></textarea><br>
+		<input type="file" class="fileInput"  name="fileName"><br>
 	    <button class="btn btn-primary" type="submit">글등록</button>   
 	</form>
 </div>

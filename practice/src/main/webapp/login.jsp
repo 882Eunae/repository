@@ -186,17 +186,15 @@ a{color:inherit;text-decoration:none}
           <label for="password" class="label" style="color: green" >Password</label>
           <input id="password" name="password"  type="password" class="input" data-type="password"  style="background-color:rgb(13 71 26 / 10%)">
         </div>
-       
         <div class="group">
           <input type="submit" class="button" onClick="handleSubmit(event)" value="Sign In" style="color: green" >
         </div>
+         	<a  href='index.jsp' align="center">회원가입하러가기</a>
      	 <c:if test="${loginCheck == 'fail'}"> <!-- if 조건 선언 -->
      		<p  align="center">  로그인정보가 일치하지 않습니다</p>
 		 </c:if>
-		  
       </div>
       </form>
-    
     </div>
   </div>
 </div>

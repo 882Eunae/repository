@@ -30,10 +30,10 @@ out.println(id+pw);
 String sql="SELECT * FROM member WHERE id = ? AND PASSWORD = ?"; //쿼리문
 
 int count = 1;
+Class.forName("org.mariadb.jdbc.Driver");    
 Connection conn = DriverManager.getConnection(url, user, password);
 
-try {
-	    Class.forName("org.mariadb.jdbc.Driver");    
+try {	   
         ptmt = conn.prepareStatement(sql);
         ptmt.setString(1, id);
         ptmt.setString(2, pw);

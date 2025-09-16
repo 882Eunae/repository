@@ -39,7 +39,6 @@
     Class.forName("org.mariadb.jdbc.Driver");
     Connection conn = DriverManager.getConnection(url, user, password);
 try {
-    System.out.println("MariaDB 연결 성공!dfsfsdfsdfds");
     	
 	ptmt = conn.prepareStatement(addSql);
 	ptmt.setString(1, name);
@@ -51,18 +50,24 @@ try {
 	
 	ptmt.executeUpdate(); //실행 
 	System.out.println("실행성공");
-	//ResultSet rs = ptmt.executeQuery(); => ptmt를 2번 실행해서 오류가남 
-	
+			
 	response.sendRedirect("login.jsp");
 
 } catch (Exception e) {
-	System.out.println("db연결실패...");
+	
     e.printStackTrace();   
     out.println(e);
     
     response.sendRedirect("index.jsp");
 }finally{
-	System.out.println("id값"+id);
+	
+	//회원가입 성공시 input값에서 받아온 이름값 삭제하기, 회원가입 페이지 한번 더 들어갔을떄 session 값이 그대로 남아있음
+	session.removeAttribute("name"); 
+	session.removeAttribute("writeId"); 
+	session.removeAttribute("pw"); 
+	session.removeAttribute("email"); 
+	session.removeAttribute("address");  
+	
     conn.close();
 } 
 %>

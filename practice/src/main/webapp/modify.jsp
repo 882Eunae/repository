@@ -31,6 +31,14 @@
  	Class.forName("org.mariadb.jdbc.Driver");
 	Connection conn = DriverManager.getConnection(url, user, password);
  	
+	
+try{	
+	
+	String loginUser=(String)session.getAttribute("userId") ; //로그인유저 
+	String userId=request.getParameter("userId");  //게시글작성자 id 
+	
+	if(loginUser.equals(userId )){
+	
 	//파라미터 전달값 넘기기 
  	ptmt=conn.prepareStatement(sql);
  	ptmt.setString(1,title); 
@@ -38,11 +46,23 @@
  	ptmt.setInt(3,boardNo);
  	
  	ptmt.executeUpdate(); 
- 	
- 	out.println(title); 
- 	
  	response.sendRedirect("welcome.jsp"); 
-
+	}
+	
+	else{
+ 		out.println("글작성자,로그인유저 정보가 달라 수정불가합니다");
+		out.println(title); 
+	}	
+ 	// 수정할떄 user와 글작성자 비교하기 
+ 		
+} catch(Exception e){
+	e.printStackTrace(); 
+	out.println(e);
+	response.sendRedirect("detail.jsp?boardNo="+boardNo);   //수정실패시 원래 화면에 돌아가있기 
+}finally{
+	conn.close();
+}
+ 
 %>
 <h3>수정하기</h3>
 </body>

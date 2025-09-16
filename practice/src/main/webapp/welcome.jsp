@@ -40,12 +40,19 @@
 	
 	 <input type="hidden" id="sessionId" value="<%=userId%>"></input>
 	<div class="container">
-	 <nav class="navbar navbar-light bg-light" style="margin-bottom: 20px;" >
-	  <div class="container-fluid" style=" background-color :  " >
-	    <a class="navbar-brand" href="write.jsp"   >게시글 쓰기</a> 
-	    <a class="navbar-brand" href="logout.jsp">로그아웃</a> 
-	  </div> 
-	</nav>
+		 <nav class="navbar navbar-light bg-light" style="margin-bottom: 20px;" >
+		  <div class="container-fluid" style=" background-color :  " >
+		    <a class="navbar-brand" href="write.jsp"   >게시글 쓰기</a> 
+		    <a class="navbar-brand" href="logout.jsp">로그아웃</a> 
+		  </div> 
+		 </nav>
+	 
+	 <!-- 검색버튼  -->
+	  <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+      
     <table width="876" border="1" style="margin-bottom: 20px;">
 		<thead>
 			<th><input type="checkbox"></input></th>
@@ -67,7 +74,7 @@
 				ResultSet rs = stmt.executeQuery(sql); 		
 				while (rs.next()) {
 					String no = rs.getString("board_no");
-					String id = rs.getString("id");
+					String id = rs.getString("member_id");
 					String title = rs.getString("title");
 		%>
 		 <tbody>

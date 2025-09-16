@@ -83,11 +83,12 @@
 	
 	String overlap=(String)session.getAttribute("overlap");  
 	
+	//페이지에 처음접속하면 overlap 기본상태값을 'noCheck' 로 두기
+	session.setAttribute("overlap", "noCheck"); 
 	
-	
+	String pw=(String)session.getAttribute("pw"); 
 	String writeId=(String)session.getAttribute("writeId");
 	String name=(String)session.getAttribute("name"); 
-	String pw=(String)session.getAttribute("pw"); 
 	String email=(String)session.getAttribute("email"); 
 	String address=(String)session.getAttribute("address"); 
 	
@@ -126,19 +127,19 @@
 				      		<p style="color: green;"> 사용가능한 아이디입니다 </p>
 				      </c:when>
 				      <c:otherwise>
-				      		<p> </p>	
+				      		<p><%=overlap %> </p>	
 				      </c:otherwise> 
 				</c:choose> 
 			</div>
 			<div>
 				<label>이름  :</label>
 				<c:choose>
-					<c:when test="${name != null }">
-						<input type="text" id="name" name="name" value="<%=name %>"/>
-					</c:when>
-					<c:when test="${name == null }">
-						<input type="text" id="name" name="name"  required="required" />
-					</c:when>
+					  <c:when test="${name != null }">	
+						<input type="text" id="name" name="name" value="<%=name %>" />
+					  </c:when>
+					   <c:when test="${name == null}">
+						<input type="text" id="name" name="name" value=" "/>
+					   </c:when>
 				</c:choose> 				
 			</div>
 			<div>
@@ -155,7 +156,14 @@
 			</div>
 			<div>
 				<label>비밀번호 : </label>
-				<input type="password" id="password" name="password" value=<%=pw %> onkeyup="passwordCheckFunction();"/>
+				<c:choose>
+			       <c:when test="${pw != null }">	
+						<input type="password" id="password" name="password" value="<%=pw %>" onkeyup="passwordCheckFunction();"/>
+			       </c:when>
+				   <c:when test="${pw == null }">	
+						<input type="password" id="password" name="password" value=" " onkeyup="passwordCheckFunction();"/>
+			       </c:when>
+			    </c:choose>
 			    <span style="color: red;" id="passwordCheckLength"></span>
 			</div>
 			<div>
@@ -167,7 +175,7 @@
 				<label>주소</label>
 				<c:choose>
 					<c:when test="${address eq null}">
-						<input type="text" id="address" name="address" value="ㅇㅇㅇ" ></input>
+						<input type="text" id="address" name="address" value=" " ></input>
 					</c:when>
 					<c:otherwise>
 						<input type="text" id="address" name="address" value=<%=address%> />
@@ -183,7 +191,7 @@
 				<label>상세주소</label>
 				<input type="text" id="detailAddress" name="detailAddress">
 			</div>
-			<input type="submit" class="button" onClick="handleSubmit(event)" value="회원가입" style="width:255px;"/>
+			<input type="submit" class="btn btn-success" onClick="handleSubmit(event)" value="회원가입" style="width:282px; align:center;"/>
 		</form>  
 	    </div>
 	  </div>

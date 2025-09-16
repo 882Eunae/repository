@@ -57,7 +57,7 @@ pageEncoding="UTF-8"%>
  	if(rs.next()){
  		 title=rs.getString("title");
  		 content=rs.getString("content");
-		 userId=rs.getString("id"); 		
+		 userId=rs.getString("member_id"); 		
  	}
  	
  	String loginUser=(String)session.getAttribute("userId"); //로그인한 유저 정보
@@ -100,7 +100,7 @@ pageEncoding="UTF-8"%>
 			</div>
 			 <a class="btn btn-primary" href="welcome.jsp" role="button">글목록 이동</a>
 			 	<%
-			 	if(equal.equals("equal")){ //c태그 이용할려 했으나 도저히 안되서 자바코드 사용	
+			 		if(equal.equals("equal")){ //c태그 이용할려 했으나 도저히 안되서 자바코드 사용	
 			 	%> 
 				<input class="btn btn-warning" type="submit" id="modify"  name="boardNo" onclick="send(event);" value="수정하기" ></input>
 				<button type="button" class="btn btn-danger" id="delBtn" >삭제하기</button>
@@ -151,7 +151,6 @@ pageEncoding="UTF-8"%>
 	
 	$('#delBtn').on('click',(event)=>{
 		let boardNo = $('#boardNo').val(); 
-		
 		location.href = "delete.jsp?boardNo=" + boardNo;
 		alert('삭제완료'); 
 	})

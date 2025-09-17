@@ -50,6 +50,8 @@ pageEncoding="UTF-8"%>
     
  	ResultSet rs = ptmt.executeQuery();
  	
+ 	
+ 	
  	String title = null; 
     String content = null; 
     String userId = " "; 
@@ -79,7 +81,7 @@ pageEncoding="UTF-8"%>
  	 }
 
  	// 절대경로,상대경로 차이 
-  	// out.println(request.getContextPath()+"/files/"+fileTitle);
+  	// out..println(request.getContextPath()+"/files/"+fileTitle);
 	
 %>
 
@@ -181,8 +183,8 @@ pageEncoding="UTF-8"%>
 
  	    // ?gil=yes&log=wow&gillog=good
  	    console.log(urlParams);
- 	
- 	    window.location.href = "overlap.jsp?" + urlParams; //안넘어간 이유 -> form 형태로 넘긴게 아니라 파라미터 한개 값만 전달함 parameter여러값 전 
+ 		
+ 	   
   		
   		window.location.href = "reply.jsp";  
   	})

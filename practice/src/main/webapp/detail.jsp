@@ -66,6 +66,21 @@ pageEncoding="UTF-8"%>
 			 	if(loginUser.equals(userId)){
 			 		equal= "equal";
 			 	}	
+				
+	String fileSql= "SELECT f.id, r.file_id, r.file_content,f.file_title  FROM file f JOIN r_file r ON f.id = r.file_id WHERE r.board_no = ? "; 
+	ptmt=conn.prepareStatement(fileSql);
+ 	ptmt.setInt(1,boardNo); 
+ 	
+ 	rs = ptmt.executeQuery(); //쿼리 
+ 	
+ 	String fileTitle=null; 
+ 	if(rs.next()){
+ 		 fileTitle=rs.getString("file_title"); 
+ 	 }
+
+ 	// 절대경로,상대경로 차이 
+  	// out.println(request.getContextPath()+"/files/"+fileTitle);
+	
 %>
 
 	<input type="hidden" id="loginInfo" value="<%=loginUser%>"/> 
@@ -93,8 +108,10 @@ pageEncoding="UTF-8"%>
 			 	if(equal.equals("equal")){
 			 	%>  
 			    	<textarea style="width: 300px; height: 200px;" id="content" name="content"  ><%=content %></textarea>
+			    	<image width="200px" height="150px" src="./files/<%=fileTitle%>"></image>
 			    <% }  else{ %>
-			    	 <textarea style="width: 300px; height: 200px;" id="content" name="content" disabled><%=content %></textarea>	
+			    	 <textarea style="width: 300px; height: 200px;" id="content" name="content" disabled><%=content %></textarea>
+			    	 <image width="200px" height="150px"  src="./files/<%=fileTitle%>"></image>	
 			    	 <% } %>
 			  </div>
 			</div>
@@ -105,20 +122,20 @@ pageEncoding="UTF-8"%>
 				<input class="btn btn-warning" type="submit" id="modify"  name="boardNo" onclick="send(event);" value="수정하기" ></input>
 				<button type="button" class="btn btn-danger" id="delBtn" >삭제하기</button>
 			 	<% } %>
-			</form>
-
+			</form> 
+			<div class="input-group mb-3">
+				<input type="text" class="form-control" id='replyCotent' placeholder="댓글을 입력해주세요" aria-label="Recipient's username" aria-describedby="button-addon2">
+				<button class="btn btn-outline-secondary" type="button" id="replyBtn">댓글입력</button>
+			</div>
 		</div>
 	</div>
-	
 
-
+ 
 </body>
 <script>
-	
 	let originTitle=$('#title').val();
 	let originContent= $('#content').val(); 
-	console.log(originTitle); 
-	console.log(originContent);
+	let boardNo = $('#boardNo').val(); 
 	
 	var f1=document.getElementById("modify");
 	console.log(f1);
@@ -146,14 +163,31 @@ pageEncoding="UTF-8"%>
 		}
 	}
 
-	console.log($('#loginInfo').val()); 
-	console.log('...');
-	
 	$('#delBtn').on('click',(event)=>{
-		let boardNo = $('#boardNo').val(); 
+		
 		location.href = "delete.jsp?boardNo=" + boardNo;
 		alert('삭제완료'); 
 	})
+	
+  	$('#replyBtn').on('click',(event)=>{
+  		
+  		let urlParams = new URLSearchParams("?checkId=test&name=yes&password=no&email=no&address=no");
+
+ 	    urlParams.set("writerId", document.getElementById('id').value);
+ 	    urlParams.set("content", document.getElementById('replyCotent').value);
+ 	    urlParams.set("boardNo",document.getElementById('password').value);
+ 	    urlParams.set("email",document.getElementById('email').value);
+ 	    urlParams.set("address",document.getElementById('address').value);
+
+ 	    // ?gil=yes&log=wow&gillog=good
+ 	    console.log(urlParams);
+ 	
+ 	    window.location.href = "overlap.jsp?" + urlParams; //안넘어간 이유 -> form 형태로 넘긴게 아니라 파라미터 한개 값만 전달함 parameter여러값 전 
+  		
+  		window.location.href = "reply.jsp";  
+  	})
+  	
+	
 
 </script>
 </html>

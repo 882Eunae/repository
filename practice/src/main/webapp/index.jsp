@@ -342,7 +342,6 @@
 	
 	    window.location.href = "overlap.jsp?" + urlParams; //안넘어간 이유 -> form 형태로 넘긴게 아니라 파라미터 한개 값만 전달함 parameter여러값 전 
 	    
-	    
 	}  
 	
 	function validateId(){

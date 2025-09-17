@@ -20,7 +20,6 @@
   		width: 900px; 
   		margin-left:auto;
   		margin-right:auto;
-
 	}
 </style>	
 </head>
@@ -48,9 +47,14 @@
 		 </nav>
 	 
 	 <!-- 검색버튼  -->
-	  <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
+	  <form class="d-flex" method="post" action="search.jsp" >
+			<select name="searchKey">					
+				<option value="title">글제목</option>
+				<option value="content">글내용</option>
+				<option value="writer">작성자</option>
+			 </select>
+	        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searchVal" >
+	        <button class="btn btn-outline-success" type="submit">Search</button> 
       </form>
       
     <table width="876" border="1" style="margin-bottom: 20px;">

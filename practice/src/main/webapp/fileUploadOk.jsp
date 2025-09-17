@@ -51,13 +51,10 @@
 <head>
 <meta charset="UTF-8">
 <title>ex16_file_ok</title>
-<link rel="stylesheet" href="http://pinnpublic.dothome.co.kr/cdn/example-min.css">
 </head>
 <body>
 
 	<h1>결과</h1>
-
-	
 	<div>
 		파일명: <%= filename %>
 	</div>
@@ -80,7 +77,6 @@
 	</div>
 	
 	<h3>파일업로드 성공 ~!</h3>
-	
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="http://pinnpublic.dothome.co.kr/cdn/example-min.js"></script>
 	
